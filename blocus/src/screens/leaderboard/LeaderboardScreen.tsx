@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { User } from 'phosphor-react-native';
+import { Trophy } from 'phosphor-react-native';
 import { colors } from '@/theme/colors';
 
-export function ProfileScreen() {
+export function LeaderboardScreen() {
   return (
-    <View style={styles.container} testID="profile-screen">
-      <User size={80} color={colors.textSecondary} weight="thin" />
-      <Text style={styles.title}>Profil</Text>
-      <Text style={styles.subtitle}>Coming in Epic 4</Text>
+    <View style={styles.container} testID="leaderboard-screen">
+      <Trophy size={80} color={colors.textSecondary} weight="thin" />
+      <Text style={styles.title}>Classement</Text>
+      <Text style={styles.subtitle}>Coming in Epic 5</Text>
     </View>
   );
 }

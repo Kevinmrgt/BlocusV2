@@ -12,7 +12,7 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
   Explore: undefined;
-  Boulders: undefined;
+  Leaderboard: undefined;
   Profile: undefined;
 };
 

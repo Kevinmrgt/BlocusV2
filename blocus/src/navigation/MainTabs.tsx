@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MapPin, Mountains, User } from 'phosphor-react-native';
+import { House, Trophy, User } from 'phosphor-react-native';
 import { colors } from '@/theme/colors';
 import { ExploreStack } from './ExploreStack';
-import { BouldersScreen } from '@/screens/boulders/BouldersScreen';
+import { LeaderboardScreen } from '@/screens/leaderboard/LeaderboardScreen';
 import { ProfileScreen } from '@/screens/profile/ProfileScreen';
 import type { MainTabParamList } from './types';
 
@@ -26,16 +26,16 @@ export function MainTabs() {
         name="Explore"
         component={ExploreStack}
         options={{
-          tabBarLabel: 'Explorer',
-          tabBarIcon: ({ color, size }) => <MapPin size={size} color={color} />,
+          tabBarLabel: 'Accueil',
+          tabBarIcon: ({ color, size }) => <House size={size} color={color} />,
         }}
       />
       <Tab.Screen
-        name="Boulders"
-        component={BouldersScreen}
+        name="Leaderboard"
+        component={LeaderboardScreen}
         options={{
-          tabBarLabel: 'Blocs',
-          tabBarIcon: ({ color, size }) => <Mountains size={size} color={color} />,
+          tabBarLabel: 'Classement',
+          tabBarIcon: ({ color, size }) => <Trophy size={size} color={color} />,
         }}
       />
       <Tab.Screen
