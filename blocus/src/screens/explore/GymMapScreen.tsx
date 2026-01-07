@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import MapView, { Region, PROVIDER_GOOGLE } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useLocation } from '@/hooks/useLocation';
 import { useGyms } from '@/hooks/useGyms';
 import { useGymStore } from '@/stores/gymStore';
@@ -9,6 +11,9 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorState } from '@/components/layout/ErrorState';
 import { colors } from '@/theme/colors';
 import type { Tables } from '@/types/database';
+import type { ExploreStackParamList } from '@/navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<ExploreStackParamList, 'GymMap'>;
 
 const DEFAULT_DELTA = {
   latitudeDelta: 0.5,
@@ -17,6 +22,7 @@ const DEFAULT_DELTA = {
 
 export function GymMapScreen() {
   const mapRef = useRef<MapView>(null);
+  const navigation = useNavigation<NavigationProp>();
   const { latitude, longitude, isLoading: locationLoading } = useLocation();
   const { data: gyms, isLoading: gymsLoading, error, refetch } = useGyms();
   const setSelectedGym = useGymStore((state) => state.setSelectedGym);
@@ -39,6 +45,11 @@ export function GymMapScreen() {
 
   const handleGymSelect = (gym: Tables<'gyms'>) => {
     setSelectedGym(gym);
+    // Navigate to Home screen after gym selection
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
   };
 
   if (locationLoading || gymsLoading) {

@@ -18,6 +18,7 @@ export type MainTabParamList = {
 
 export type ExploreStackParamList = {
   GymMap: undefined;
+  Home: undefined;
   GymDetail: { gymId: string };
   WallDetail: { wallId: string; wallName: string };
   BoulderDetail: { boulderId: string };

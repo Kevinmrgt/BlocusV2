@@ -15,7 +15,7 @@ const mockGym: Tables<'gyms'> = {
 describe('gymStore', () => {
   beforeEach(() => {
     // Reset store state before each test
-    useGymStore.setState({ selectedGym: null });
+    useGymStore.setState({ selectedGym: null, _hasHydrated: false });
   });
 
   it('has null selectedGym initially', () => {
@@ -57,5 +57,30 @@ describe('gymStore', () => {
     setSelectedGym(anotherGym);
     expect(useGymStore.getState().selectedGym?.id).toBe('gym-2');
     expect(useGymStore.getState().selectedGym?.name).toBe('Arkose Nation');
+  });
+
+  describe('hydration', () => {
+    it('has _hasHydrated false initially', () => {
+      const { _hasHydrated } = useGymStore.getState();
+      expect(_hasHydrated).toBe(false);
+    });
+
+    it('setHasHydrated updates hydration state', () => {
+      const { setHasHydrated } = useGymStore.getState();
+
+      setHasHydrated(true);
+
+      expect(useGymStore.getState()._hasHydrated).toBe(true);
+    });
+
+    it('hydration state does not affect selectedGym operations', () => {
+      const { setSelectedGym, setHasHydrated } = useGymStore.getState();
+
+      setHasHydrated(true);
+      setSelectedGym(mockGym);
+
+      expect(useGymStore.getState()._hasHydrated).toBe(true);
+      expect(useGymStore.getState().selectedGym).toEqual(mockGym);
+    });
   });
 });
