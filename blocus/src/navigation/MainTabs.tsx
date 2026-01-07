@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MapPin, Mountains, User } from 'phosphor-react-native';
 import { colors } from '@/theme/colors';
-import { ExploreScreen } from '@/screens/explore/ExploreScreen';
+import { ExploreStack } from './ExploreStack';
 import { BouldersScreen } from '@/screens/boulders/BouldersScreen';
 import { ProfileScreen } from '@/screens/profile/ProfileScreen';
 import type { MainTabParamList } from './types';
@@ -24,7 +24,7 @@ export function MainTabs() {
     >
       <Tab.Screen
         name="Explore"
-        component={ExploreScreen}
+        component={ExploreStack}
         options={{
           tabBarLabel: 'Explorer',
           tabBarIcon: ({ color, size }) => <MapPin size={size} color={color} />,

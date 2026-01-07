@@ -1,0 +1,64 @@
+story: "2.1"
+title: "Gym Map Screen"
+gate_decision: PASS
+review_date: "2026-01-07"
+reviewer: "Quinn (QA Agent)"
+
+acceptance_criteria:
+  AC1:
+    description: "Map displays on first app launch"
+    status: PASS
+    evidence: "GymMapScreen as initial route in ExploreStack, manual verification"
+  AC2:
+    description: "Location permission requested"
+    status: PASS
+    evidence: "useLocation hook with requestForegroundPermissionsAsync, 4 unit tests"
+  AC3:
+    description: "Map centered on user/default location"
+    status: PASS
+    evidence: "France fallback (46.603354, 1.888334), animateToRegion on location change"
+  AC4:
+    description: "Gym markers displayed from Supabase"
+    status: PASS
+    evidence: "GymMarker component renders for each gym from useGyms hook"
+  AC5:
+    description: "Tap marker shows gym name in callout"
+    status: PASS
+    evidence: "GymCallout with name/address display, 5 unit tests"
+  AC6:
+    description: "Selectionner button in callout"
+    status: PASS
+    evidence: "Pressable with onSelect callback, gymStore integration, 4 unit tests"
+
+test_results:
+  test_suites: 7
+  tests_passed: 27
+  tests_failed: 0
+  typescript_errors: 0
+  lint_errors: 0
+
+code_quality:
+  strengths:
+    - "Clean component architecture"
+    - "Proper TypeScript typing"
+    - "Good separation of concerns"
+    - "Cleanup in useLocation (isMounted)"
+    - "Platform-specific styling"
+  observations:
+    - "Firebase temporarily disabled (stub in crashlytics.ts)"
+    - "Google Maps API key in app.json"
+
+risks:
+  - risk: "API key exposure"
+    probability: Low
+    impact: Medium
+    mitigation: "Move to env var for production"
+  - risk: "Firebase disabled"
+    probability: N/A
+    impact: Low
+    mitigation: "Stub maintains interface"
+
+recommendations:
+  - "Add gym seed data to Supabase"
+  - "Move Google Maps API key to env var"
+  - "Re-enable Firebase before production"

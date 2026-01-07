@@ -1,50 +1,50 @@
-import crashlytics from '@react-native-firebase/crashlytics';
+// Crashlytics stub - Firebase disabled for development
+// Re-enable Firebase and replace this file when ready for production
 
 export const Crashlytics = {
   /**
    * Set user ID for crash context
    */
-  setUser: (userId: string) => {
-    crashlytics().setUserId(userId);
+  setUser: (_userId: string) => {
+    // No-op: Firebase disabled
   },
 
   /**
    * Log custom message for debugging
    */
   log: (message: string) => {
-    crashlytics().log(message);
+    if (__DEV__) {
+      console.log('[Crashlytics]', message);
+    }
   },
 
   /**
    * Record non-fatal error with optional context
    */
-  recordError: (error: Error, context?: Record<string, string>) => {
-    if (context) {
-      Object.entries(context).forEach(([key, value]) => {
-        crashlytics().setAttribute(key, value);
-      });
+  recordError: (error: Error, _context?: Record<string, string>) => {
+    if (__DEV__) {
+      console.error('[Crashlytics] Error:', error.message);
     }
-    crashlytics().recordError(error);
   },
 
   /**
    * Trigger a test crash (only use in development)
    */
   crash: () => {
-    crashlytics().crash();
+    // No-op: Firebase disabled
   },
 
   /**
    * Set custom attribute for crash reports
    */
-  setAttribute: (key: string, value: string) => {
-    crashlytics().setAttribute(key, value);
+  setAttribute: (_key: string, _value: string) => {
+    // No-op: Firebase disabled
   },
 
   /**
    * Set multiple attributes at once
    */
-  setAttributes: (attributes: Record<string, string>) => {
-    crashlytics().setAttributes(attributes);
+  setAttributes: (_attributes: Record<string, string>) => {
+    // No-op: Firebase disabled
   },
 };
