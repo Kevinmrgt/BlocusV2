@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MapPin, Mountains } from 'phosphor-react-native';
+import { Mountains } from 'phosphor-react-native';
 import { useGymStore } from '@/stores/gymStore';
+import { GymHeader } from '@/components/gym/GymHeader';
 import { colors } from '@/theme/colors';
 import type { ExploreStackParamList } from '@/navigation/types';
 
@@ -23,16 +24,11 @@ export function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header with gym name */}
-      <View style={styles.header}>
-        <Pressable style={styles.gymSelector} onPress={handleChangeGym} testID="change-gym-button">
-          <MapPin size={24} color={colors.primary} weight="fill" />
-          <Text style={styles.gymName} numberOfLines={1}>
-            {selectedGym?.name ?? 'Aucune salle'}
-          </Text>
-          <Text style={styles.changeText}>Changer</Text>
-        </Pressable>
-      </View>
+      <GymHeader
+        gymName={selectedGym?.name ?? null}
+        onChangeGym={handleChangeGym}
+        testID="change-gym-button"
+      />
 
       {/* Placeholder content */}
       <View style={styles.content}>
@@ -48,11 +44,6 @@ export function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  changeText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: '500',
-  },
   comingSoon: {
     backgroundColor: colors.primaryLight,
     borderRadius: 16,
@@ -73,30 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 24,
-  },
-  gymName: {
-    color: colors.textPrimary,
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    marginHorizontal: 12,
-  },
-  gymSelector: {
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    elevation: 2,
-    flexDirection: 'row',
-    padding: 16,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  header: {
-    backgroundColor: colors.background,
-    padding: 16,
-    paddingTop: 60,
   },
   subtitle: {
     color: colors.textSecondary,
