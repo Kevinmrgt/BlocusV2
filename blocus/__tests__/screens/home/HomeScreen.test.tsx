@@ -10,14 +10,17 @@ import type { Tables } from '@/types/database';
 jest.mock('@/hooks/useWalls');
 
 // Mock WallSection to avoid needing to mock nested useBouldersByWall hook
-jest.mock('@/components/gym/WallSection', () => {
-  const React = require('react');
-  const { View, Text } = require('react-native');
-  return {
-    WallSection: ({ wall }: { wall: { id: string; name: string } }) =>
-      React.createElement(View, { testID: `wall-section-${wall.id}` }, React.createElement(Text, null, wall.name)),
-  };
-});
+jest.mock('@/components/gym/WallSection', () => ({
+  WallSection: ({ wall }: { wall: { id: string; name: string } }) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { View, Text } = require('react-native');
+    return (
+      <View testID={`wall-section-${wall.id}`}>
+        <Text>{wall.name}</Text>
+      </View>
+    );
+  },
+}));
 
 // Mock navigation
 const mockReset = jest.fn();

@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GymMapScreen } from '@/screens/explore/GymMapScreen';
 import { HomeScreen } from '@/screens/home/HomeScreen';
+import { BoulderDetailScreen } from '@/screens/explore/BoulderDetailScreen';
 import { useGymStore } from '@/stores/gymStore';
 import type { ExploreStackParamList } from './types';
 
@@ -21,7 +22,8 @@ export function ExploreStack() {
     >
       <Stack.Screen name="GymMap" component={GymMapScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      {/* GymDetail, WallDetail, BoulderDetail will be added in future stories */}
+      <Stack.Screen name="BoulderDetail" component={BoulderDetailScreen} />
+      {/* GymDetail, WallDetail will be added in future stories */}
     </Stack.Navigator>
   );
 }

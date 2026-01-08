@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/layout/EmptyState';
 import { ErrorState } from '@/components/layout/ErrorState';
 import { colors } from '@/theme/colors';
 import type { ExploreStackParamList } from '@/navigation/types';
+import type { BoulderWithPhotos } from '@/services/api/boulders';
 
 type NavigationProp = NativeStackNavigationProp<ExploreStackParamList, 'Home'>;
 
@@ -32,6 +33,10 @@ export function HomeScreen() {
     refetch();
   };
 
+  const handleBoulderPress = (boulder: BoulderWithPhotos) => {
+    navigation.navigate('BoulderDetail', { boulderId: boulder.id });
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return <LoadingSpinner message="Chargement des murs..." />;
@@ -47,7 +52,9 @@ export function HomeScreen() {
       );
     }
 
-    return walls.map((wall) => <WallSection key={wall.id} wall={wall} />);
+    return walls.map((wall) => (
+      <WallSection key={wall.id} wall={wall} onBoulderPress={handleBoulderPress} />
+    ));
   };
 
   return (
