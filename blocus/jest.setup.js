@@ -74,3 +74,16 @@ jest.mock('react-native-maps', () => {
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
+
+// Mock expo-image
+jest.mock('expo-image', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+
+  const MockImage = (props) =>
+    React.createElement(View, { testID: props.testID || 'expo-image', style: props.style });
+
+  return {
+    Image: MockImage,
+  };
+});

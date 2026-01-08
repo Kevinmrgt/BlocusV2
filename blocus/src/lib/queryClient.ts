@@ -16,6 +16,9 @@ export const queryKeys = {
     all: ['gyms'] as const,
     withWalls: (gymId: string) => ['gyms', gymId, 'walls'] as const,
   },
+  walls: {
+    byGym: (gymId: string) => ['walls', 'gym', gymId] as const,
+  },
   boulders: {
     byWall: (wallId: string) => ['boulders', 'wall', wallId] as const,
     detail: (boulderId: string) => ['boulders', boulderId] as const,
