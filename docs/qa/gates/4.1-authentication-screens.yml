@@ -1,0 +1,51 @@
+story: 4.1
+title: Authentication Screens
+tested_by: Claude Opus 4.5
+date: 2026-01-12
+
+acceptance_criteria:
+  - id: AC1
+    description: Ecran d'inscription avec champs email, password, confirmation password
+    status: PASS
+    evidence: RegisterScreen.tsx has all 3 input fields
+
+  - id: AC2
+    description: Ecran de connexion avec champs email, password
+    status: PASS
+    evidence: LoginScreen.tsx has email and password inputs
+
+  - id: AC3
+    description: Validation des champs (email valide, password min 8 caracteres)
+    status: PASS
+    evidence: Zod schemas validate email format and min 8 chars password
+
+  - id: AC4
+    description: Messages d'erreur clairs (email deja utilise, mot de passe incorrect, etc.)
+    status: PASS
+    evidence: French error messages in auth.ts and schemas
+
+  - id: AC5
+    description: Integration Supabase Auth pour creation de compte et connexion
+    status: PASS
+    evidence: signUp, signIn, signOut functions in auth.ts use supabase.auth
+
+  - id: AC6
+    description: Redirection vers Home apres authentification reussie
+    status: PASS
+    evidence: RootNavigator conditionally renders MainTabs/AuthStack based on auth state
+
+  - id: AC7
+    description: Lien pour naviguer entre inscription et connexion
+    status: PASS
+    evidence: Both screens have Pressable links navigating to each other
+
+test_results:
+  typescript: PASS
+  eslint: PASS
+  jest:
+    total: 142
+    passed: 142
+    failed: 0
+
+overall_status: PASS
+score: 100/100
