@@ -1,0 +1,47 @@
+story: "3.3"
+title: "Seed Data & Testing"
+reviewed_by: "QA Agent (Quinn)"
+review_date: "2026-01-12"
+gate: "PASS"
+quality_score: 100
+
+acceptance_criteria:
+  ac1_seed_script_gyms:
+    status: "PASS"
+    evidence: "3 gyms created: Bloc Session Paris, Arkose Nation, Climb Up Pantin"
+  ac2_walls_per_gym:
+    status: "PASS"
+    evidence: "12 walls total (5+4+3 per gym), within 3-5 range"
+  ac3_boulders_with_photos:
+    status: "PASS"
+    evidence: "42 boulders with 51 photos using picsum.photos placeholder URLs"
+  ac4_data_variety:
+    status: "PASS"
+    evidence: "Difficulty 1-10 covered, 6 boulders without description, French names"
+  ac5_executable_script:
+    status: "PASS"
+    evidence: "Successfully executed via Supabase SQL Editor"
+  ac6_documentation:
+    status: "PASS"
+    evidence: "docs/seed-data.md created with complete instructions"
+
+data_summary:
+  gyms: 3
+  walls: 12
+  boulders: 42
+  photos: 51
+  difficulty_distribution:
+    easy_1_3: 10
+    medium_4_6: 17
+    hard_7_8: 11
+    expert_9_10: 4
+
+files_created:
+  - blocus/supabase/seed.sql
+  - docs/seed-data.md
+
+notes: |
+  - Initial UUID format error fixed (p -> 0 prefix for valid hex)
+  - All foreign key relationships correct
+  - Edge cases covered: NULL descriptions, long descriptions, varied difficulty
+  - Manual testing confirmed data displays correctly in app
