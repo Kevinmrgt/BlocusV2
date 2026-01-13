@@ -6,15 +6,42 @@ import { useGymStore } from '@/stores/gymStore';
 
 // Mock navigation
 const mockDispatch = jest.fn();
+const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => {
   const actual = jest.requireActual('@react-navigation/native');
   return {
     ...actual,
     useNavigation: () => ({
       dispatch: mockDispatch,
+      navigate: mockNavigate,
     }),
   };
 });
+
+// Mock auth provider
+jest.mock('@/providers/AuthProvider', () => ({
+  useAuth: () => ({
+    isAuthenticated: true,
+    user: { email: 'test@example.com' },
+    session: {},
+    isLoading: false,
+    signIn: jest.fn(),
+    signUp: jest.fn(),
+    signOut: jest.fn(),
+  }),
+}));
+
+// Mock Supabase
+jest.mock('@/lib/supabase', () => ({
+  supabase: {
+    auth: {
+      getSession: jest.fn().mockResolvedValue({ data: { session: null } }),
+      onAuthStateChange: jest.fn().mockReturnValue({
+        data: { subscription: { unsubscribe: jest.fn() } },
+      }),
+    },
+  },
+}));
 
 describe('ProfileScreen', () => {
   beforeEach(() => {
@@ -22,7 +49,7 @@ describe('ProfileScreen', () => {
     useGymStore.setState({ selectedGym: null, _hasHydrated: true });
   });
 
-  it('renders placeholder content', () => {
+  it('renders profile screen with title', () => {
     const { getByText, getByTestId } = render(
       <NavigationContainer>
         <ProfileScreen />
@@ -31,7 +58,7 @@ describe('ProfileScreen', () => {
 
     expect(getByTestId('profile-screen')).toBeTruthy();
     expect(getByText('Profil')).toBeTruthy();
-    expect(getByText('Coming in Epic 4')).toBeTruthy();
+    expect(getByText('test@example.com')).toBeTruthy();
   });
 
   it('renders current gym section', () => {
@@ -76,7 +103,31 @@ describe('ProfileScreen', () => {
       </NavigationContainer>
     );
 
-    expect(getByText('Aucune salle sélectionnée')).toBeTruthy();
+    expect(getByText('Aucune salle selectionnee')).toBeTruthy();
+  });
+
+  it('renders settings section', () => {
+    const { getByTestId, getByText } = render(
+      <NavigationContainer>
+        <ProfileScreen />
+      </NavigationContainer>
+    );
+
+    expect(getByTestId('settings-button')).toBeTruthy();
+    expect(getByTestId('settings-card')).toBeTruthy();
+    expect(getByText('Compte et preferences')).toBeTruthy();
+  });
+
+  it('navigates to settings when settings button is pressed', () => {
+    const { getByTestId } = render(
+      <NavigationContainer>
+        <ProfileScreen />
+      </NavigationContainer>
+    );
+
+    fireEvent.press(getByTestId('settings-button'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('Settings');
   });
 
   it('navigates to gym map when change gym is pressed', () => {

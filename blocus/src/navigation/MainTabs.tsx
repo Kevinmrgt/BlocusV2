@@ -2,8 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { House, Trophy, User } from 'phosphor-react-native';
 import { colors } from '@/theme/colors';
 import { ExploreStack } from './ExploreStack';
+import { ProfileStack } from './ProfileStack';
 import { LeaderboardScreen } from '@/screens/leaderboard/LeaderboardScreen';
-import { ProfileScreen } from '@/screens/profile/ProfileScreen';
 import type { MainTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -40,7 +40,7 @@ export function MainTabs() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Profil',
           tabBarIcon: ({ color, size }) => <User size={size} color={color} />,
