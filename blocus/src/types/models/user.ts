@@ -35,3 +35,13 @@ export interface UserUpdate {
   created_at?: string;
   updated_at?: string;
 }
+
+/**
+ * Extended user profile with computed statistics
+ * [Source: architecture/data-models.md#user]
+ */
+export interface UserProfile extends User {
+  validations_count: number;
+  favorites_count: number;
+  rank: number | null;
+}

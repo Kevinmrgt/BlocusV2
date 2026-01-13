@@ -87,3 +87,24 @@ jest.mock('expo-image', () => {
     Image: MockImage,
   };
 });
+
+// Mock expo-image-picker
+jest.mock('expo-image-picker', () => ({
+  launchCameraAsync: jest.fn(),
+  launchImageLibraryAsync: jest.fn(),
+  requestCameraPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: 'granted', granted: true })
+  ),
+  requestMediaLibraryPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: 'granted', granted: true })
+  ),
+}));
+
+// Mock expo-image-manipulator
+jest.mock('expo-image-manipulator', () => ({
+  manipulateAsync: jest.fn(() => Promise.resolve({ uri: 'mock-uri' })),
+  SaveFormat: {
+    JPEG: 'jpeg',
+    PNG: 'png',
+  },
+}));
