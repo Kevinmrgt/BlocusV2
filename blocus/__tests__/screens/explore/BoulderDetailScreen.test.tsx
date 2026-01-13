@@ -8,6 +8,20 @@ import type { BoulderWithPhotos } from '@/services/api/boulders';
 
 jest.mock('@/hooks/useBoulders');
 
+// Mock Auth
+jest.mock('@/providers/AuthProvider', () => ({
+  useAuth: () => ({
+    isAuthenticated: false,
+    user: null,
+  }),
+}));
+
+// Mock useFavorites hooks
+jest.mock('@/hooks/useFavorites', () => ({
+  useIsFavorited: () => ({ data: false, isLoading: false }),
+  useToggleFavorite: () => ({ mutate: jest.fn(), isPending: false }),
+}));
+
 // Mock navigation
 const mockGoBack = jest.fn();
 jest.mock('@react-navigation/native', () => {
@@ -172,7 +186,7 @@ describe('BoulderDetailScreen', () => {
     expect(getByText('Actions')).toBeTruthy();
     expect(getByText('Connectez-vous pour interagir')).toBeTruthy();
     expect(getByTestId('validate-button')).toBeTruthy();
-    expect(getByTestId('favorite-button')).toBeTruthy();
+    expect(getByTestId('favorite-button-container')).toBeTruthy();
     expect(getByTestId('comments-button')).toBeTruthy();
     expect(getByText('Valider')).toBeTruthy();
     expect(getByText('Favori')).toBeTruthy();

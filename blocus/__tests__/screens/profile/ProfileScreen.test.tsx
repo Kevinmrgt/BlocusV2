@@ -61,6 +61,17 @@ jest.mock('@/hooks/useUserProfile', () => ({
   }),
 }));
 
+// Mock useFavorites hook
+jest.mock('@/hooks/useFavorites', () => ({
+  useFavorites: () => ({
+    data: [],
+    isLoading: false,
+    error: null,
+  }),
+  useIsFavorited: () => ({ data: false, isLoading: false }),
+  useToggleFavorite: () => ({ mutate: jest.fn(), isPending: false }),
+}));
+
 // Mock Supabase
 jest.mock('@/lib/supabase', () => ({
   supabase: {
@@ -143,7 +154,7 @@ describe('ProfileScreen', () => {
 
     // Switch to favorites
     fireEvent.press(getByTestId('tab-favorites'));
-    expect(getByTestId('favorites-placeholder')).toBeTruthy();
+    expect(getByTestId('favorites-empty')).toBeTruthy();
 
     // Switch back to history
     fireEvent.press(getByTestId('tab-history'));

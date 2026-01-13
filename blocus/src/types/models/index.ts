@@ -16,6 +16,7 @@ export type {
   Boulder,
   BoulderInsert,
   BoulderUpdate,
+  BoulderWithDetails,
   Validation,
   ValidationInsert,
   ValidationUpdate,

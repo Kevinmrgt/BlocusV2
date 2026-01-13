@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MapPin, CaretRight, Gear, Mountains } from 'phosphor-react-native';
+import { MapPin, CaretRight, Gear, Mountains, Heart } from 'phosphor-react-native';
 import { Text } from '@/components/ui/Text';
 import { ProfileHeader } from '@/components/user/ProfileHeader';
 import { UserStats } from '@/components/user/UserStats';
+import { BoulderCard, CARD_GAP } from '@/components/boulder/BoulderCard';
 import { useGymStore } from '@/stores/gymStore';
 import { useAuth } from '@/providers/AuthProvider';
 import { useUserProfile } from '@/hooks/useUserProfile';
+import { useFavorites } from '@/hooks/useFavorites';
 import { colors } from '@/theme/colors';
 import type { ProfileStackParamList } from '@/navigation/types';
+import type { BoulderWithDetails } from '@/types/models/boulder';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, 'MyProfile'>;
 
@@ -22,6 +25,7 @@ export function ProfileScreen() {
   const clearSelectedGym = useGymStore((state) => state.clearSelectedGym);
   const { isAuthenticated, user } = useAuth();
   const { data: profile, isLoading } = useUserProfile();
+  const { data: favorites, isLoading: favoritesLoading } = useFavorites();
   const [activeTab, setActiveTab] = useState<TabType>('history');
 
   const handleChangeGym = () => {
@@ -48,6 +52,22 @@ export function ProfileScreen() {
 
   const handleEditPress = () => {
     navigation.navigate('EditProfile');
+  };
+
+  const handleBoulderPress = (boulderId: string) => {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Explore',
+        params: {
+          screen: 'BoulderDetail',
+          params: { boulderId },
+        },
+      })
+    );
+  };
+
+  const handleViewAllFavorites = () => {
+    navigation.navigate('MyFavorites');
   };
 
   // Guest mode - simplified view
@@ -134,17 +154,50 @@ export function ProfileScreen() {
         </Pressable>
       </View>
 
-      {/* Tab Content - Placeholder for Story 4.4 */}
+      {/* Tab Content */}
       <View style={styles.tabContent}>
         {activeTab === 'history' ? (
           <View style={styles.emptyState} testID="history-placeholder">
             <Mountains size={48} color={colors.textSecondary} />
             <Text style={styles.emptyText}>Vos validations apparaîtront ici</Text>
           </View>
+        ) : favoritesLoading ? (
+          <View style={styles.emptyState} testID="favorites-loading">
+            <ActivityIndicator size="small" color={colors.primary} />
+            <Text style={styles.emptyText}>Chargement...</Text>
+          </View>
+        ) : favorites && favorites.length > 0 ? (
+          <View testID="favorites-content">
+            <View style={styles.favoritesGrid}>
+              {favorites.slice(0, 4).map((boulder: BoulderWithDetails) => (
+                <BoulderCard
+                  key={boulder.id}
+                  boulder={{
+                    ...boulder,
+                    boulder_photos: boulder.photos,
+                  }}
+                  onPress={() => handleBoulderPress(boulder.id)}
+                />
+              ))}
+            </View>
+            {favorites.length > 4 && (
+              <Pressable
+                style={styles.viewAllButton}
+                onPress={handleViewAllFavorites}
+                testID="view-all-favorites-button"
+              >
+                <Text style={styles.viewAllText}>Voir tous ({favorites.length})</Text>
+                <CaretRight size={16} color={colors.primary} />
+              </Pressable>
+            )}
+          </View>
         ) : (
-          <View style={styles.emptyState} testID="favorites-placeholder">
-            <Mountains size={48} color={colors.textSecondary} />
-            <Text style={styles.emptyText}>Vos favoris apparaîtront ici</Text>
+          <View style={styles.emptyState} testID="favorites-empty">
+            <Heart size={48} color={colors.textSecondary} weight="light" />
+            <Text style={styles.emptyText}>Aucun favori</Text>
+            <Text style={styles.emptySubtext}>
+              Ajoutez des boulders à vos favoris depuis l&apos;écran de détail
+            </Text>
           </View>
         )}
       </View>
@@ -206,10 +259,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 48,
   },
+  emptySubtext: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    marginTop: 4,
+    textAlign: 'center',
+  },
   emptyText: {
     color: colors.textSecondary,
     fontSize: 14,
     marginTop: 12,
+  },
+  favoritesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: CARD_GAP,
+    padding: 16,
   },
   guestContainer: {
     alignItems: 'center',
@@ -273,5 +338,18 @@ const styles = StyleSheet.create({
   },
   tabTextActive: {
     color: colors.primary,
+  },
+  viewAllButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 16,
+    paddingTop: 8,
+  },
+  viewAllText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: '600',
+    marginRight: 4,
   },
 });

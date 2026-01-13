@@ -3,11 +3,13 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Image } from 'expo-image';
-import { ArrowLeft, Heart, CheckCircle, ChatCircle, Mountains } from 'phosphor-react-native';
+import { ArrowLeft, CheckCircle, ChatCircle, Mountains } from 'phosphor-react-native';
 import { useBoulderById } from '@/hooks/useBoulders';
 import { DifficultyBadge } from '@/components/boulder/DifficultyBadge';
+import { FavoriteButton } from '@/components/boulder/FavoriteButton';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorState } from '@/components/layout/ErrorState';
+import { useAuth } from '@/providers/AuthProvider';
 import { colors } from '@/theme/colors';
 import type { ExploreStackParamList } from '@/navigation/types';
 
@@ -18,6 +20,7 @@ export function BoulderDetailScreen() {
   const route = useRoute<BoulderDetailRouteProp>();
   const navigation = useNavigation<NavigationProp>();
   const { boulderId } = route.params;
+  const { isAuthenticated } = useAuth();
 
   const { data: boulder, isLoading, error, refetch } = useBoulderById(boulderId);
 
@@ -93,24 +96,43 @@ export function BoulderDetailScreen() {
           )}
         </View>
 
-        {/* Action buttons (disabled for guests) */}
+        {/* Action buttons */}
         <View style={styles.actionsSection}>
           <Text style={styles.actionsTitle}>Actions</Text>
-          <Text style={styles.actionsHint}>Connectez-vous pour interagir</Text>
+          {!isAuthenticated && (
+            <Text style={styles.actionsHint}>Connectez-vous pour interagir</Text>
+          )}
 
           <View style={styles.actionsRow}>
-            <Pressable style={styles.actionButton} disabled testID="validate-button">
-              <CheckCircle size={28} color={colors.textSecondary} />
+            <Pressable
+              style={[styles.actionButton, !isAuthenticated && styles.actionButtonDisabled]}
+              disabled={!isAuthenticated}
+              testID="validate-button"
+            >
+              <CheckCircle
+                size={28}
+                color={isAuthenticated ? colors.primary : colors.textSecondary}
+              />
               <Text style={styles.actionLabel}>Valider</Text>
             </Pressable>
 
-            <Pressable style={styles.actionButton} disabled testID="favorite-button">
-              <Heart size={28} color={colors.textSecondary} />
+            <View
+              style={[styles.actionButton, !isAuthenticated && styles.actionButtonDisabled]}
+              testID="favorite-button-container"
+            >
+              <FavoriteButton boulderId={boulderId} testID="favorite-button" />
               <Text style={styles.actionLabel}>Favori</Text>
-            </Pressable>
+            </View>
 
-            <Pressable style={styles.actionButton} disabled testID="comments-button">
-              <ChatCircle size={28} color={colors.textSecondary} />
+            <Pressable
+              style={[styles.actionButton, !isAuthenticated && styles.actionButtonDisabled]}
+              disabled={!isAuthenticated}
+              testID="comments-button"
+            >
+              <ChatCircle
+                size={28}
+                color={isAuthenticated ? colors.primary : colors.textSecondary}
+              />
               <Text style={styles.actionLabel}>Commentaires</Text>
             </Pressable>
           </View>
@@ -126,8 +148,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border,
     borderRadius: 12,
     flex: 1,
-    opacity: 0.5,
     paddingVertical: 16,
+  },
+  actionButtonDisabled: {
+    opacity: 0.5,
   },
   actionLabel: {
     color: colors.textSecondary,

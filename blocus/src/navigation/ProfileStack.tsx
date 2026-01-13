@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ProfileScreen } from '@/screens/profile/ProfileScreen';
 import { EditProfileScreen } from '@/screens/profile/EditProfileScreen';
+import { MyFavoritesScreen } from '@/screens/profile/MyFavoritesScreen';
 import { SettingsScreen } from '@/screens/profile/SettingsScreen';
 import { colors } from '@/theme/colors';
 import type { ProfileStackParamList } from './types';
@@ -21,6 +22,7 @@ export function ProfileStack() {
           headerStyle: { backgroundColor: colors.background },
         }}
       />
+      <Stack.Screen name="MyFavorites" component={MyFavoritesScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );

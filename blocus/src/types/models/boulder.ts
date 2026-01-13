@@ -3,6 +3,8 @@
  * [Source: architecture/data-models.md]
  */
 
+import type { BoulderPhoto } from './photo';
+
 export interface Boulder {
   id: string;
   wall_id: string;
@@ -31,6 +33,17 @@ export interface BoulderUpdate {
   difficulty?: number;
   created_at?: string;
   updated_at?: string;
+}
+
+/**
+ * Boulder with extended details for API responses
+ */
+export interface BoulderWithDetails extends Boulder {
+  photos: BoulderPhoto[];
+  validations_count: number;
+  comments_count: number;
+  is_validated?: boolean;
+  is_favorited?: boolean;
 }
 
 export interface Validation {
