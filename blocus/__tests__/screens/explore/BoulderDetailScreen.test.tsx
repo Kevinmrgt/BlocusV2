@@ -22,6 +22,12 @@ jest.mock('@/hooks/useFavorites', () => ({
   useToggleFavorite: () => ({ mutate: jest.fn(), isPending: false }),
 }));
 
+// Mock useValidations hooks
+jest.mock('@/hooks/useValidations', () => ({
+  useIsValidated: () => ({ data: false, isLoading: false }),
+  useValidateBoulder: () => ({ mutate: jest.fn(), isPending: false }),
+}));
+
 // Mock navigation
 const mockGoBack = jest.fn();
 jest.mock('@react-navigation/native', () => {

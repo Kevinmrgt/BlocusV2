@@ -3,10 +3,11 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Image } from 'expo-image';
-import { ArrowLeft, CheckCircle, ChatCircle, Mountains } from 'phosphor-react-native';
+import { ArrowLeft, ChatCircle, Mountains } from 'phosphor-react-native';
 import { useBoulderById } from '@/hooks/useBoulders';
 import { DifficultyBadge } from '@/components/boulder/DifficultyBadge';
 import { FavoriteButton } from '@/components/boulder/FavoriteButton';
+import { ValidationButton } from '@/components/boulder/ValidationButton';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorState } from '@/components/layout/ErrorState';
 import { useAuth } from '@/providers/AuthProvider';
@@ -104,17 +105,17 @@ export function BoulderDetailScreen() {
           )}
 
           <View style={styles.actionsRow}>
-            <Pressable
+            <View
               style={[styles.actionButton, !isAuthenticated && styles.actionButtonDisabled]}
-              disabled={!isAuthenticated}
-              testID="validate-button"
+              testID="validate-button-container"
             >
-              <CheckCircle
-                size={28}
-                color={isAuthenticated ? colors.primary : colors.textSecondary}
+              <ValidationButton
+                boulderId={boulderId}
+                difficulty={boulder.difficulty}
+                testID="validate-button"
               />
               <Text style={styles.actionLabel}>Valider</Text>
-            </Pressable>
+            </View>
 
             <View
               style={[styles.actionButton, !isAuthenticated && styles.actionButtonDisabled]}
